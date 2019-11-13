@@ -6,13 +6,10 @@
 - [x] Create 'model_data' Folder
 
 ```bush
-+ model_data/
-|
-| +-- trained_weights_final_007.h5
-|
-| +-- yolo_anchors_007.txt
-|
-| +-- voc_classes_006.txt 
+model_data/
+ ./trained_weights_final_007.h5
+ ./yolo_anchors_007.txt
+ ./voc_classes_006.txt 
 ```
 
 - [x] Download trained_weights_final_007.h5

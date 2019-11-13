@@ -3,6 +3,8 @@
 
 ###Download "model_data"  from : (model_data/)
 ```bush
+- [x] This is a complete item
+- [ ] This is an incomplete item
 https://drive.google.com/open?id=1SGOiFA-EHPm-4ZJMVj2neefBmp-etnDS
 ```
 ```bush

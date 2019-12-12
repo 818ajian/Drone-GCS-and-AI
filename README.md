@@ -1,7 +1,7 @@
 # Drone-GCS-and-AI
 **Using yolov3 detect coast's pullutions : plastic bottle , plastic bag , cap etc ...**
 <hr></hr>
-<h1>Getting Started</h1>
+<h2>Getting Started</h2>
 
 - [x] Create 'model_data' Folder
 

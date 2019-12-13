@@ -2,7 +2,7 @@
 ***Using yolov3 detect coast's pollutions : plastic bottles , plastic bags , caps etc ...***
 <hr></hr>
 <h2>Getting Started</h2>
-<h3>Another choice</h3>
+
 
 - [x] Notice that in ***model_data***  folder ...
 ```bush
@@ -16,6 +16,8 @@
 ```bush
  https://drive.google.com/open?id=1QVF2AbILUvDLGh02Uwbuzf-lKC-3xqI2
  ```
+ 
+ <h4>Or Another choice</h4>
 - [x] Create ***model_data*** Folder and delete original ***model_data*** folder
 
 ```bush

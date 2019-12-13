@@ -12,7 +12,7 @@
             voc_classes.txt
  ```
 
-- [x] You can download ***trained_weights_final_009.h5*** from here ▼  and replace the original ***trained_weights_final_009.h5***
+- [x] You can download ***trained_weights_final_009.h5*** below, and replace the original ***trained_weights_final_009.h5***
 ```bush
  https://drive.google.com/open?id=1QVF2AbILUvDLGh02Uwbuzf-lKC-3xqI2
  ```

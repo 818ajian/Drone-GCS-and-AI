@@ -2,8 +2,8 @@
 ***Using yolov3 detect coast's pollutions : plastic bottles , plastic bags , caps etc ...***
 <hr></hr>
 <h2>Getting Started</h2>
-
-- [x] Create 'model_data' Folder
+<h3>Another choice</h3>
+- [x] Create ***model_data*** Folder and delete original ***model_data*** folder
 
 ```bush
 /model_data/

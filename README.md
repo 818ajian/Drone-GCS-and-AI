@@ -17,6 +17,7 @@
  https://drive.google.com/open?id=1QVF2AbILUvDLGh02Uwbuzf-lKC-3xqI2
  ```
  
+ <hr></hr>
  <h4>Or Another choice</h4>
  
 - [x] Create ***model_data*** Folder and delete original ***model_data*** folder

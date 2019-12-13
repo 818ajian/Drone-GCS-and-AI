@@ -3,6 +3,7 @@
 <hr></hr>
 <h2>Getting Started</h2>
 <h3>Another choice</h3>
+
 - [x] Create ***model_data*** Folder and delete original ***model_data*** folder
 
 ```bush

@@ -4,6 +4,18 @@
 <h2>Getting Started</h2>
 <h3>Another choice</h3>
 
+- [x] Notice that in ***model_data***  folder ...
+```bush
+/model_data/
+            trained_weights_final_009.h5
+            yolo_anchors_009.txt
+            voc_classes.txt
+ ```
+
+- [x] You can download ***trained_weights_final_009.h5*** from here ▼
+```bush
+ https://drive.google.com/open?id=1QVF2AbILUvDLGh02Uwbuzf-lKC-3xqI2
+ ```
 - [x] Create ***model_data*** Folder and delete original ***model_data*** folder
 
 ```bush

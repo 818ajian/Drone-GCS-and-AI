@@ -6,7 +6,7 @@
 
 - [x] Notice that in ***model_data***  folder ...
 ```bush
-/model_data/
+model_data/
             trained_weights_final_009.h5
             yolo_anchors_009.txt
             voc_classes.txt
@@ -18,12 +18,12 @@
  ```
  
  <hr></hr>
- <h4>Or Another choice</h4>
+ <h4>Another choice</h4>
  
 - [x] Create ***model_data*** Folder and delete original ***model_data*** folder
 
 ```bush
-/model_data/
+model_data/
             trained_weights_final_007.h5
             yolo_anchors_007.txt
             voc_classes_006.txt 
@@ -41,6 +41,17 @@ https://drive.google.com/open?id=1LNn4cPTo-lJHQ10zKjKuGzDLcd8oQ_8c
 ```bush
 https://drive.google.com/open?id=1opCO01u4EebdOHxc5JBBf8GlgSw6qIfa
 ```
+
+
+
+
+
+
+
+
+
+
+
 
 
 

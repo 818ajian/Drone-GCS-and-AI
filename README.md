@@ -22,6 +22,13 @@ model_data/
  https://drive.google.com/open?id=1QVF2AbILUvDLGh02Uwbuzf-lKC-3xqI2
  ```
  
+ - [x]Download video ***20191010.mov*** below
+```bush
+https://drive.google.com/open?id=1hoyO722VzyuK36tE-YZ4oRicDJdD7aoN
+```
+ 
+ 
+ 
  <hr></hr>
  <h4>Another choice</h4>
  

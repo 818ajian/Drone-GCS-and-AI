@@ -22,7 +22,7 @@ model_data/
  https://drive.google.com/open?id=1QVF2AbILUvDLGh02Uwbuzf-lKC-3xqI2
  ```
  
- - [x]Download video ***20191010.mov*** below
+ - [x] Download video ***20191010.mov*** below
 ```bush
 https://drive.google.com/open?id=1hoyO722VzyuK36tE-YZ4oRicDJdD7aoN
 ```

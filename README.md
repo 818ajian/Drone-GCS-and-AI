@@ -12,7 +12,7 @@ model_data/
             voc_classes.txt
  ```
 
-- [x] You can download ***trained_weights_final_009.h5*** below, and replace the original one.
+- [x] You can download ***trained_weights_final_009.h5*** below, and replace the original ***one***.
 ```bush
  https://drive.google.com/open?id=1QVF2AbILUvDLGh02Uwbuzf-lKC-3xqI2
  ```
@@ -20,7 +20,7 @@ model_data/
  <hr></hr>
  <h4>Another choice</h4>
  
-- [x] Create ***model_data*** Folder and delete original ***model_data*** folder.
+- [x] Create ***model_data*** folder and delete original ***one***.
 
 ```bush
 model_data/

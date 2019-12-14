@@ -1,6 +1,9 @@
 # Drone-GCS-and-AI 
-<h3> Branch :master(just simulation, if you want to control drone automatically, go to another branch)</h3>
+
 ***Using yolov3 detect coast's pollutions : plastic bottles , plastic bags , caps etc ...***
+
+<h3> Branch :master(just simulation, if you want to control drone automatically, go to another branch)</h3>
+
 
 <hr></hr>
 <h2>Getting Started</h2>

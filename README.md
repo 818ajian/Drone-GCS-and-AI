@@ -2,7 +2,7 @@
 
 ***Using yolov3 detect coast's pollutions : plastic bottles , plastic bags , caps etc ...***
 
-<h2> simulation, if you want to control drone automatically, see another branch</h2>
+***simulation, if you want to control drone automatically, see another branch***
 
 
 <hr></hr>

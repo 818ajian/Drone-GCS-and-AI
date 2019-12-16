@@ -1,0 +1,78 @@
+<script language="JavaScript">
+  var source = new EventSource('/topic/gcs'); //ENTER YOUR TOPICNAME HERE
+
+  source.addEventListener('message', function(e){  
+    obj = JSON.parse(e.data); 
+      if(obj.channel == '00009') { 
+      document.getElementById("drone_status").innerHTML = 
+            "<b> [    Lat , Lon   ] : " + obj.latitude + " <b> , " + obj.longitude
+          + "<br>[      Alt       ] : " + obj.altitude + " <b>(m)"
+          + "<br>[ Velocity_North ] : " + obj.velocity_N    + "<b>(m/sec)"
+          + "<br>[ Velocity_East  ] : " + obj.velocity_E    + "<b>(m/sec)"
+          + "<br>[ Velocity_Down  ] : " + obj.velocity_Down + "<b>(m/sec)"
+          + "<br>[      Yaw       ] : " + obj.yaw + "<b>(deg)"
+          + "<br>[      roll      ] : " + obj.roll + "<b>(deg)"
+          + "<br>[      pitch     ] : " + obj.pitch + "<b>(deg)"
+          + "<br>[   Ground speed ] : " + obj.groundspeed + "<b>(m/sec)"
+          + "<br>[      Mode      ] : " + obj.mode 
+          + "<br>[  Dist to home  ] : " + obj.dist_to_home + "<b>(m)"
+          
+          
+    }
+  }, false);  
+</script>
+
+
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- LEAFLET -->
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+      integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin=""/>   
+    
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+      integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+      crossorigin=""></script>
+    <!-- END LEAFLET -->
+    <title>GCS</title>
+
+
+    <style type="text/css">
+    .box {
+        border: 1px solid red;
+        width: 2000px;}
+    .a, .b {
+          display: inline-block;
+          width: 900px;
+          height: 580px;
+          border: 1px solid red;}
+    </style>
+
+
+  </head>
+  <body>
+    <h1>Copter GCS Map</h1>
+    
+    <div class='box'>
+      <div class='a'><script src="../static/leaf.js"></script></div>
+      <div class='b'><div id="drone_status"></div></div>
+    </div>     
+    
+      
+    
+    
+
+        
+    <img src="../static/vm6.jpg" >
+    
+    
+    
+    
+  </body>
+
+</html>

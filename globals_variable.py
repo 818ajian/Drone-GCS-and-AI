@@ -1,6 +1,7 @@
 from dronekit import connect
-
 import dronekit_sitl
+import socket
+
 def globals_vehicle_init():
     """
     USE dronkit-sitl :
@@ -25,9 +26,13 @@ def globals_vehicle_init():
     Home    = vehicle.location.global_relative_frame
     print('Home :',Home)
 
-
 def object_identify_init():
     global trash_num 
     global cap_num 
     trash_num = 0
     cap_num =0
+
+def socket_connect_init():
+    global sock
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect(('127.0.0.1',9999))

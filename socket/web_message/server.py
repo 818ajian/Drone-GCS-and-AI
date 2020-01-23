@@ -11,13 +11,18 @@ def threadWork(client,adr):
                 print("----------------------------------------------")
                 break
             else:
-                print ("Client send: " + msg)
-                data = json.loads(msg) 
-                if data['channel'] == '00001':
-                    print('00001')
-                if data['channel'] == '00002':
-                    print('00002')
-                client.sendall(("You say: " + msg).encode('utf-8'))
+                print ("Client send: " + msg)                
+                client.sendall(("You say: " + msg).encode('utf-8'))                 
+                try:
+                    data = json.loads(msg) 
+                    if data['channel'] == '00001':
+                        print(f'timestamp: {data["timestamp"]}')
+                    if data['channel'] == '00002':
+                        print(f'timestamp: {data["timestamp"]}')  
+                except Exception as e:
+                    pass
+                    #print(e)
+                
     except Exception as e:
         print("----------------------------------------------")
         print(e)

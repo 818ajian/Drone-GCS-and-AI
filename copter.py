@@ -1,22 +1,24 @@
-# -------------------------------------- KAFKA USE --------------------
-from pykafka import KafkaClient
-import json
+# -------------------------------- SERVER SENT EVENTS --------------------
 from datetime import datetime
 import time
-# ------------------------------------- COPTER USE -----------------------
+import json
+import sys
+# ------------------------------------- COPTER -----------------------
 import threading
 from dronekit import connect, VehicleMode, LocationGlobal, LocationGlobalRelative
 from pymavlink import mavutil # Needed for command message definitions
 import math
 from math import asin,sin,cos,sqrt,radians
 import numpy as np
-#------------------------------------ GLOBAL VARIABLE -------------------------------------------
+#------------------------------- -- GLOBAL VARIABLE -------------------------------------------
 import globals_variable
 globals_variable.globals_vehicle_init()
 globals_variable.object_identify_init()
+globals_variable.socket_connect_init()
 
 vehicle   = globals_variable.vehicle
 Home      = globals_variable.Home
+sock      = globals_variable.sock
 
 TRASH_NUM = globals_variable.trash_num
 CAP_NUM   = globals_variable.cap_num
@@ -330,14 +332,14 @@ def YOLO_JOB():
     global vehicle      
     detect_video(YOLO(image = False),"","")
 #    ------------------------------ KAFKA FUNCTION ------------------------------------------  
-def mark_vehicle_home(HOME):
+def mark_vehicle_home(sock,HOME):
     data = {}
     data['channel'] = '00004'
     data['latitude'] = HOME.lat
     data['longitude'] = HOME.lon
     message = json.dumps(data)
-    producer.produce(message.encode('ascii'))
-def generate_checkpoint(coordinates): 
+    sock.sendall(message.encode('utf-8'))
+def generate_checkpoint(sock,coordinates): 
     """mark the copter waypoints on the map"""
     #global vehicle
     data = {}
@@ -348,7 +350,7 @@ def generate_checkpoint(coordinates):
         data['path_is_ok'] = '1'
         message = json.dumps(data)
         print(message)
-        producer.produce(message.encode('ascii'))   
+        sock.sendall(message.encode('utf-8')) 
     i = 0
 
     while i < len(coordinates):        
@@ -358,23 +360,17 @@ def generate_checkpoint(coordinates):
         data['waypoint'] = i+1
         message = json.dumps(data)
         print(message)
-        producer.produce(message.encode('ascii'))        
+        sock.sendall(message.encode('utf-8'))        
         time.sleep(0.2)      
         i+=1
 
     generate_OK()
 def read_json(path):
-    """READ COORDINATES FROM JSON """ 
+    # READ COORDINATES FROM JSON 
     input_file = open(path)
     json_array = json.load(input_file)
     coordinates = json_array['features'][0]['geometry']['coordinates']
-    return coordinates
-def kafka_producer():  
-    """ Create the kafka producer"""
-    client = KafkaClient(hosts="localhost:9092")
-    topic = client.topics['gcs']
-    producer = topic.get_sync_producer()
-    return producer      
+    return coordinates  
 #    ------------------------------ COPTER FUNCTION -----------------------------------------   
 def get_attributes():
     print (vehicle.location.local_frame)    #NED
@@ -393,7 +389,7 @@ def get_attributes():
     print ("Heading: %s" % vehicle.heading)
     print ("Is Armable?: %s" % vehicle.is_armable)
     print ("System status: %s" % vehicle.system_status.state)    
-def send_drone_status_to_GCS():
+def send_drone_status_to_GCS(sock):
     global vehicle
     global Home
     location = vehicle.location.global_relative_frame
@@ -422,9 +418,9 @@ def send_drone_status_to_GCS():
     data['gps_status']     = str(vehicle.gps_0)
     data['battery']        = str(vehicle.battery)
     message = json.dumps(data)    
-    producer.produce(message.encode('ascii'))         
+    sock.sendall(message.encode('utf-8'))         
 def arm_and_takeoff(aTargetAltitude):
-    """Arms vehicle and fly to aTargetAltitude."""
+    # Arms vehicle and fly to aTargetAltitude.
     print("Basic pre-arm checks")
     # Don't let the user try to arm until autopilot is ready
     while not vehicle.is_armable:
@@ -446,21 +442,21 @@ def arm_and_takeoff(aTargetAltitude):
     # Wait until the vehicle reaches a safe height before processing the goto (otherwise the command 
     #  after Vehicle.simple_takeoff will execute immediately).
     while True:
-        send_drone_status_to_GCS()  
-        cur_pos = send_current_mark()      
+        send_drone_status_to_GCS(sock)  
+        cur_pos = send_current_mark(sock)      
         print(" Altitude: ", vehicle.location.global_relative_frame.alt)              
         if vehicle.location.global_relative_frame.alt>=aTargetAltitude*0.95: #Trigger just below target alt.
             print("Reached target altitude")
             break
         time.sleep(1)
-def send_current_mark():
+def send_current_mark(sock):
     data = {}
     cur_pos = vehicle.location.global_relative_frame    
     data['channel'] = '00002'
     data['latitude'] = cur_pos.lat
     data['longitude'] = cur_pos.lon
     message = json.dumps(data)
-    producer.produce(message.encode('ascii'))
+    sock.sendall(message.encode('utf-8'))
     return cur_pos
 def condition_yaw(heading, relative=False):
     """
@@ -513,39 +509,6 @@ def set_roi(location):
         )
     # send command to vehicle
     vehicle.send_mavlink(msg)
-def get_location_metres(original_location, dNorth, dEast):
-    """
-    Returns a LocationGlobal object containing the latitude/longitude `dNorth` and `dEast` metres from the 
-    specified `original_location`. The returned LocationGlobal has the same `alt` value
-    as `original_location`.
-
-    The function is useful when you want to move the vehicle around specifying locations relative to 
-    the current vehicle position.
-
-    The algorithm is relatively accurate over small distances (10m within 1km) except close to the poles.
-
-    For more information see:
-    http://gis.stackexchange.com/questions/2951/algorithm-for-offsetting-a-latitude-longitude-by-some-amount-of-meters
-    """
-    earth_radius = 6378137.0 #Radius of "spherical" earth
-    #Coordinate offsets in radians
-    dLat = dNorth/earth_radius
-    dLon = dEast/(earth_radius*math.cos(math.pi*original_location.lat/180))
-
-    #New position in decimal degrees
-    newlat = original_location.lat + (dLat * 180/math.pi)
-    newlon = original_location.lon + (dLon * 180/math.pi)
-    
-    if type(original_location) is LocationGlobal:
-        targetlocation=LocationGlobal(newlat, newlon,original_location.alt)
-
-    elif type(original_location) is LocationGlobalRelative:
-        targetlocation=LocationGlobalRelative(newlat, newlon,original_location.alt)
-
-    else:
-        raise Exception("Invalid Location object passed")
-        
-    return targetlocation
 def get_bearing(aLocation1, aLocation2):
     """
     Returns the bearing between the two LocationGlobal objects passed as parameters.
@@ -569,8 +532,8 @@ def goto(target, gotoFunction = vehicle.simple_goto):
     
     while vehicle.mode.name=="GUIDED": #Stop action if we are no longer in guided mode.
                 
-        cur_pos = send_current_mark()
-        send_drone_status_to_GCS()
+        cur_pos = send_current_mark(sock)
+        send_drone_status_to_GCS(sock)
         remainingDistance = haversine(cur_pos,target.lon,target.lat)
         
         vehicle.groundspeed = 1
@@ -580,7 +543,7 @@ def goto(target, gotoFunction = vehicle.simple_goto):
             torlerance = 0.8
         if remainingDistance<0.31:
             torlerance = 5
-        torlerance_dist = remainingDistance*torlerance                                  
+        torlerance_dist = remainingDistance * torlerance                                  
       
         print("[Dist to target]:{:.2f}(m),[Speed]:{:.2f}(m/s),[tolerance dist]:{:.2f}(m)".format(remainingDistance,vehicle.groundspeed,torlerance_dist))    
 
@@ -602,8 +565,7 @@ def haversine(pos1,pos2_lon,pos2_lat):
     r = 6378137.0 #-- Radius of "spherical" earth in meter
     return c * r   
 def COPTER_JOB():   
-    global vehicle        
-    
+    global vehicle         
     try:
         arm_and_takeoff(aTargetAltitude=8)   
         for i in range(len(waypoints)): 
@@ -624,8 +586,8 @@ def COPTER_JOB():
         print('CAP_NUM:',CAP_NUM)
         while(1):            
             #time.sleep(1)
-            cur_pos = send_current_mark()
-            send_drone_status_to_GCS()
+            cur_pos = send_current_mark(sock)
+            send_drone_status_to_GCS(sock)
             time.sleep(1)
             
         print("Close vehicle object")
@@ -637,6 +599,7 @@ def COPTER_JOB():
         print(e)     
     finally :
         vehicle.close() 
+        sys.exit(0)
 def main():
     global vehicle
     t1 = threading.Thread(target = COPTER_JOB)
@@ -645,14 +608,13 @@ def main():
     t1.start()
     #t2.start()    
 #-------------------------------------- MAIN -------------------------------------------
-if __name__ == '__main__':       
-    producer = kafka_producer()     
+if __name__ == '__main__':               
     HOME = vehicle.location.global_relative_frame
     print('HOME:',HOME)
     time.sleep(1)
-    mark_vehicle_home(HOME)
+    mark_vehicle_home(sock,HOME)
     waypoints = read_json('./data/X_ground.json')
-    generate_checkpoint(waypoints)          
+    generate_checkpoint(sock,waypoints)          
     print("\n------------- States -----------------")
     get_attributes()    
     main()

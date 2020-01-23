@@ -11,7 +11,7 @@ mapMarkers2 = [];
 mapMarkers3 = [];
 path = [];
 
-var source = new EventSource('/topic/gcs'); //ENTER YOUR TOPICNAME HERE
+var source = new EventSource('/topic/gcs'); 
 
 source.addEventListener('message', function(e){
   console.log('Message');
@@ -27,21 +27,18 @@ source.addEventListener('message', function(e){
       radius: 2 }).addTo(mymap); 
     trash_marker.bindTooltip("lon:"+obj.longitude
       +"<br>lat:"+obj.latitude+"<br>trash:"+obj.trash_num+"<br>cap:"+obj.cap_num+"<br>time:"+obj.timestamp).openTooltip();
-    mapMarkers1.push(trash_marker);    
-    //trash_marker.bindTooltip("lon:"+obj.longitude).openTooltip();
-    
-  }
-
+    //trash_marker.bindTooltip("lon:"+obj.longitude).openTooltip();   
+    mapMarkers1.push(trash_marker);}    
+     
+  
   if(obj.channel == '00002') {
     //mark the current copter position
     for (var i = 0; i < mapMarkers2.length; i++) {
       mymap.removeLayer(mapMarkers2[i]);
     }
     marker = L.marker([obj.latitude, obj.longitude]).addTo(mymap);
-    //marker.bindPopup("lon:"+obj.longitude+"<br>lat:"+obj.latitude).openPopup();
-    
-    mapMarkers2.push(marker);    
-  }
+    //marker.bindPopup("lon:"+obj.longitude+"<br>lat:"+obj.latitude).openPopup();    
+    mapMarkers2.push(marker);}
   if(obj.channel == '00003') {
     //mark the path on map
     /*for (var i = 0; i < hmapMarkers3.lengt; i+  +) {
@@ -57,18 +54,15 @@ source.addEventListener('message', function(e){
     if(obj.path_is_ok==1){//plot path
       polyline =  L.polyline(path, {color: 'pink',weight:5,opacity:0.3,}).addTo(mymap);
     }*/
-    circle.bindTooltip("WP"+ obj.waypoint).openTooltip();
-  }
+    circle.bindTooltip("WP"+ obj.waypoint).openTooltip();}
   if(obj.channel == '00004') {
     //mark the HOME   
     home = L.circleMarker([obj.latitude, obj.longitude], {
       color: 'green',
       fillColor: '#f03',
       fillOpacity: 0.4,
-      radius: 10 }).addTo(mymap);   
-       
-    home.bindTooltip("HOME").openTooltip();
-  }
+      radius: 10 }).addTo(mymap);          
+    home.bindTooltip("HOME").openTooltip();}
   if(obj.channel == '00009') {                  
     document.getElementById("drone_status").innerHTML =
           "<b> [    Lat , Lon   ] : " + obj.latitude + "  , " +obj.longitude+"<b>"
@@ -84,6 +78,5 @@ source.addEventListener('message', function(e){
         + "<br>[      pitch     ] : " + obj.pitch + "<b>(deg)"            
         + "<br>[  Dist to home  ] : " + obj.dist_to_home + "<b>(m)"
         + "<br>"+obj.gps_status+"<b>"
-        + "<br>"+obj.battery+"<b>"
-}
+        + "<br>"+obj.battery+"<b>"}
 }, false);
